@@ -10,7 +10,7 @@ app = FastAPI()
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # React dev server
+    allow_origins=["http://localhost:8080"],  # React dev server
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -23,17 +23,23 @@ UPLOADS_DIR = Path("uploads")
 UPLOADS_DIR.mkdir(exist_ok=True)
 
 @app.post("/upload")
-async def upload_file(file: UploadFile = File(...)):
+async def upload_file(files: list[UploadFile] = File(...)):
     try:
-        # Save the uploaded file
-        file_path = UPLOADS_DIR / file.filename
-        with file_path.open("wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
+        # Save uploaded files
+        saved_files = []
+        for file in files:
+            file_path = UPLOADS_DIR / file.filename
+            with file_path.open("wb") as buffer:
+                shutil.copyfileobj(file.file, buffer)
+            saved_files.append(str(file_path))
 
-        # Process the document
-        documents = rag.load_documents(str(file_path))
+        # Process documents
+        documents = []
+        for path in saved_files:
+            documents.extend(rag.load_documents(path))
+        print("Processing")
         rag.process_documents(documents)
-        return {"message": f"Successfully processed {file.filename}"}
+        return {"message": f"Processed {len(saved_files)} files"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

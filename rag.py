@@ -1,4 +1,5 @@
 import os
+import uuid
 from typing import List
 from dotenv import load_dotenv
 from langchain_core.documents import Document
@@ -14,12 +15,12 @@ from langgraph.graph import START, StateGraph, MessagesState, END
 from langgraph.prebuilt import ToolNode, tools_condition
 from langgraph.checkpoint.memory import MemorySaver
 
-# Load environment variables
 load_dotenv()
 
 class ConversationalRAG:
     def __init__(self):
         self.groq_api_key = os.getenv('GROQ_API_KEY')
+        self.thread = uuid.uuid4()
         if not self.groq_api_key:
             raise ValueError('GROQ_API_KEY environment variable not set')
 
@@ -160,7 +161,7 @@ class ConversationalRAG:
             raise ValueError("No documents have been processed. Please process documents first.")
         if not self.graph:
             raise ValueError("Graph not initialized. Please process documents first.")
-        config = {"configurable": {"thread_id": "abc123"}}
+        config = {"configurable": {"thread_id": f"{self.thread}"}}
         state = self.graph.invoke({"messages": [{"role": "user", "content": question}]}, config=config)
         return state["messages"][-1].content
 
@@ -173,7 +174,6 @@ if __name__ == "__main__":
     documents = rag.load_documents("./uploads")
     rag.process_documents(documents)
 
-    # Continuous chat example
     while True:
         question = input("\nEnter your question (or 'quit' to exit): ")
         if question.lower() == 'quit':
