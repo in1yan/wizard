@@ -1,3 +1,5 @@
-./venv/ 
+venv/ 
 ./.ropeproject/
-./uploads/
+uploads/
+vectorstore/
+.env
