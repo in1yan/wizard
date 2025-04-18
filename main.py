@@ -39,29 +39,32 @@ def load_docs(file_paths):
     for file_path in file_paths:
         loader = PyPDFLoader(file_path)
         docs = loader.load_and_split()
+        print("loaded doc")
         all_docs.extend(docs)
     return all_docs
 def gen_chunk(files):
-    if os.path.exists("vectorstore"):
-        v_store.load_local("vectorstore", embeddings, allow_dangerous_deserialization=True)
-    else:
-        txt_spliter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-        chunks = txt_spliter.split_documents(load_docs(files))
-        v_store.add_documents(chunks)
-        v_store.save_local("vectorstore")
+    # if os.path.exists("vectorstore"):
+    #     v_store = FAISS.load_local("vectorstore", embeddings, allow_dangerous_deserialization=True)
+    # else:
+    txt_spliter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    chunks = txt_spliter.split_documents(load_docs(files))
+    v_store.add_documents(documents = chunks)
+    # v_store.save_local("vectorstore")
 
 # Tool for retrieving context
 @tool(response_format="content_and_artifact")
 def retrieve(query: str):
     """Retrieve information related to a query."""
     docs = v_store.similarity_search(query, k=2)
+    print("docs : ", docs)
     serialized = "\n\n".join(
-        f"Source: {doc.metadata}\nContent: {doc.page_content}" for doc in docs
+        (f"Source: {doc.metadata}\n" f"Content: {doc.page_content}") for doc in docs
     )
     return serialized, docs
 
 # Node to use the tool if necessary
 def query_or_respond(state: MessagesState):
+    """generate tool call for retrieveal or respond."""
     llm_tools = llm.bind_tools([retrieve])
     response = llm_tools.invoke(state["messages"])
     return {"messages": [response]}
@@ -112,14 +115,7 @@ graph_builder.add_edge("generate", END)
 graph = graph_builder.compile()
 
 if __name__ == "__main__":
-    gen_chunk(["uploads/test1.pdf", "uploads/test2.pdf"])
-    # input_message = "Hello"
-
-    # for step in graph.stream(
-    #     {"messages": [{"role": "user", "content": input_message}]},
-    #     stream_mode="values",
-    # ):
-    #     step["messages"][-1].pretty_print()
+    gen_chunk(["./uploads/test1.pdf", "./uploads/test2.pdf"])
     while True:
         query = input("Enter your question: ")
         if query.lower() == "exit":
