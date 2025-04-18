@@ -1,0 +1,85 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 29% 19%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 25% 22%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 25% 22%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 252 79% 75%;
+    --primary-foreground: 240 5.9% 10%;
+
+    --secondary: 250 23% 54%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 15% 30%;
+    --muted-foreground: 240 5% 84.9%;
+
+    --accent: 199 85% 49%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 50.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 15% 30%;
+    --input: 240 15% 30%;
+    --ring: 252 79% 75%;
+
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .wizard-button {
+    @apply bg-wizard-primary hover:bg-wizard-secondary text-white font-medium py-2 px-6 rounded-lg transition-all shadow-lg hover:shadow-xl;
+  }
+  
+  .wizard-card {
+    @apply bg-card/80 backdrop-blur-sm border border-wizard-primary/20 rounded-xl shadow-lg p-6;
+  }
+  
+  .chat-container {
+    @apply bg-gradient-to-br from-wizard-dark/80 to-card/60 backdrop-blur-md;
+  }
+  
+  .chat-message-user {
+    @apply bg-wizard-primary/20 border-l-4 border-wizard-primary rounded-r-lg p-4;
+  }
+  
+  .chat-message-bot {
+    @apply bg-wizard-secondary/10 border-l-4 border-wizard-secondary rounded-r-lg p-4;
+  }
+  
+  .wizard-gradient-text {
+    @apply bg-gradient-to-r from-wizard-primary to-wizard-accent bg-clip-text text-transparent;
+  }
+
+  .floating {
+    @apply animate-float;
+  }
+  
+  .glass-morphism {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-xl shadow-lg;
+  }
+  
+  .shimmer {
+    @apply bg-shimmer-gradient bg-[length:400%_100%] animate-shimmer;
+  }
+}
