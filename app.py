@@ -42,7 +42,18 @@ async def upload_file(files: list[UploadFile] = File(...)):
         return {"message": f"Processed {len(saved_files)} files"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
+@app.post("/process-youtube")
+async def process_youtube(vedio:VedioID):
+    try:
+        id = vedio.vedio_id
+        vedios, title = reg.load_youtube(id)
+        rag.process_youtube(vedios)
+        return {"message": f"Processed {title}", "title": title}
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 @app.post("/chat")
 async def chat(question: str = Body(..., embed=True)):
     try:

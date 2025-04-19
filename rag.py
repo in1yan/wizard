@@ -14,7 +14,8 @@ from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
 from langgraph.graph import START, StateGraph, MessagesState, END
 from langgraph.prebuilt import ToolNode, tools_condition
 from langgraph.checkpoint.memory import MemorySaver
-
+from youtube_transcript_api import YouTubeTranscriptApi
+from yt_dlp import YoutubeDL
 load_dotenv()
 
 class ConversationalRAG:
@@ -87,7 +88,34 @@ class ConversationalRAG:
 
         # Set up the graph after documents are processed
         self._setup_graph()
+    def load_youtube(self, id: str) -> List[Document]:
+        """Load documents from a youtube video"""
+        transcript = YouTubeTranscriptApi.get_transcript(id)
+        text = ""
+        for i in transcript:
+            text += i['text'] + " "
+        documents = [Document(page_content=text)]
+        with YoutubeDL() as ydl:
+            info_dict = ydl.extract_info(id, download=False)
+            title = info_dict.get('title', None)
+        return documents, title
+    def process_youtube(self, documents: List[Document]) -> str:
+        """Process documents and create vector store"""
+        # Split documents into chunks
+        splits = self.text_splitter.split_documents(documents)
 
+        # Create vector stor
+        if self.vector_store is None:
+            self.vector_store = FAISS.from_documents(
+                documents=splits,
+                embedding=self.embeddings
+            )
+        else:
+            # Add new documents to existing vector store
+            self.vector_store.add_documents(splits)
+
+        # Set up the graph after documents are processed
+        self._setup_graph()
     def _setup_graph(self):
         """Set up the LangGraph components"""
         # Define the retrieval tool
