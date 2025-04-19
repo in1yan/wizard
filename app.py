@@ -2,6 +2,7 @@ from fastapi import FastAPI, UploadFile, File, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 from rag import ConversationalRAG
 from pathlib import Path
+from pydantic import BaseModel
 import shutil
 import os
 
@@ -21,7 +22,8 @@ rag = ConversationalRAG()
 # Create uploads directory if it doesn't exist
 UPLOADS_DIR = Path("uploads")
 UPLOADS_DIR.mkdir(exist_ok=True)
-
+class VideoID(BaseModel):
+    video_id: str
 @app.post("/upload")
 async def upload_file(files: list[UploadFile] = File(...)):
     try:
@@ -43,11 +45,11 @@ async def upload_file(files: list[UploadFile] = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 @app.post("/process-youtube")
-async def process_youtube(vedio:VedioID):
+async def process_youtube(video:VideoID):
     try:
-        id = vedio.vedio_id
-        vedios, title = reg.load_youtube(id)
-        rag.process_youtube(vedios)
+        id = video.video_id
+        videos, title = reg.load_youtube(id)
+        rag.process_youtube(videos)
         return {"message": f"Processed {title}", "title": title}
         
     except ValueError as e:
