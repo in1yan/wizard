@@ -1,10 +1,10 @@
-
 import React, { useEffect, useRef } from 'react';
 import { Message } from '@/lib/types';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { UserCircle, Sparkles } from 'lucide-react';
+import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table';
 
 interface ChatMessageProps {
   message: Message;
@@ -75,6 +75,57 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
                       {children}
                     </code>
                   );
+                },
+                table({node, ...props}) {
+                  return (
+                    <Table className="my-4 border border-border rounded-lg overflow-hidden">
+                      {props.children}
+                    </Table>
+                  );
+                },
+                thead({node, ...props}) {
+                  return <TableHeader>{props.children}</TableHeader>;
+                },
+                tbody({node, ...props}) {
+                  return <TableBody>{props.children}</TableBody>;
+                },
+                tr({node, ...props}) {
+                  return <TableRow>{props.children}</TableRow>;
+                },
+                th({node, ...props}) {
+                  return <TableHead className="bg-muted">{props.children}</TableHead>;
+                },
+                td({node, ...props}) {
+                  return <TableCell>{props.children}</TableCell>;
+                },
+                p({node, ...props}) {
+                  return <p className="text-foreground mb-4" {...props} />;
+                },
+                a({node, ...props}) {
+                  return <a className="text-wizard-primary hover:text-wizard-accent" {...props} />;
+                },
+                ul({node, ...props}) {
+                  return <ul className="list-disc list-inside mb-4 space-y-1" {...props} />;
+                },
+                ol({node, ...props}) {
+                  return <ol className="list-decimal list-inside mb-4 space-y-1" {...props} />;
+                },
+                li({node, ...props}) {
+                  return <li className="text-foreground" {...props} />;
+                },
+                blockquote({node, ...props}) {
+                  return (
+                    <blockquote className="border-l-4 border-wizard-primary pl-4 italic my-4" {...props} />
+                  );
+                },
+                h1({node, ...props}) {
+                  return <h1 className="text-2xl font-bold mb-4 text-foreground" {...props} />;
+                },
+                h2({node, ...props}) {
+                  return <h2 className="text-xl font-bold mb-3 text-foreground" {...props} />;
+                },
+                h3({node, ...props}) {
+                  return <h3 className="text-lg font-bold mb-2 text-foreground" {...props} />;
                 }
               }}
             >

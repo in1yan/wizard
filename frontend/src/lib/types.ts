@@ -1,4 +1,3 @@
-
 export interface Message {
   id: string;
   role: 'user' | 'assistant';
@@ -15,9 +14,16 @@ export interface FileInfo {
   data?: File;
 }
 
+export interface VideoInfo {
+  id: string;
+  title: string;
+  url: string;
+}
+
 export interface ChatState {
   messages: Message[];
   files: FileInfo[];
+  videos: VideoInfo[];
   isProcessing: boolean;
   isFirstUpload: boolean;
 }
