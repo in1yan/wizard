@@ -48,7 +48,7 @@ async def upload_file(files: list[UploadFile] = File(...)):
 async def process_youtube(video:VideoID):
     try:
         id = video.video_id
-        videos, title = reg.load_youtube(id)
+        videos, title = rag.load_youtube(id)
         rag.process_youtube(videos)
         return {"message": f"Processed {title}", "title": title}
         
