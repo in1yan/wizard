@@ -57,14 +57,14 @@ class ConversationalRAG:
             # Load single PDF file
             loader = PyPDFLoader(str(path))
             documents.extend(loader.load())
-        elif path.is_dir():
-            # Load all PDFs from directory
-            loader = DirectoryLoader(
-                str(path),
-                glob="**/*.pdf",
-                loader_cls=PyPDFLoader
-            )
-            documents.extend(loader.load())
+        # elif path.is_dir():
+        #     # Load all PDFs from directory
+        #     loader = DirectoryLoader(
+        #         str(path),
+        #         glob="**/*.pdf",
+        #         loader_cls=PyPDFLoader
+        #     )
+        #     documents.extend(loader.load())
         elif path.is_file() and path.suffix.lower() in (".ppt", ".pptx"):
             loader = loaders.ppt_loader(str(path))
             documents.extend( loader )

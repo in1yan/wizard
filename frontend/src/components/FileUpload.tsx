@@ -109,10 +109,8 @@ const FileUpload: React.FC<FileUploadProps> = ({
       setUploading(true);
       
       try {
-        // Use the real API call instead of setTimeout
-        await import('@/lib/api').then(({ uploadFiles }) => {
-          return uploadFiles(validFiles.map(f => f.data!).filter(Boolean));
-        });
+        // Don't upload files here - they will be uploaded by the parent component
+        // when onFilesUploaded is called
         
         setSelectedFiles(prev => [...prev, ...validFiles]);
         onFilesUploaded(validFiles);
