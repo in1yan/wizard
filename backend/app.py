@@ -5,7 +5,7 @@ from pathlib import Path
 from pydantic import BaseModel
 import shutil
 import os
-
+from utils.loaders import load_youtube
 app = FastAPI()
 
 # Configure CORS
@@ -48,7 +48,7 @@ async def upload_file(files: list[UploadFile] = File(...)):
 async def process_youtube(video:VideoID):
     try:
         id = video.video_id
-        videos, title = rag.load_youtube(id)
+        videos, title = load_youtube(id)
         rag.process_youtube(videos)
         return {"message": f"Processed {title}", "title": title}
         

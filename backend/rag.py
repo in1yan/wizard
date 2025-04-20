@@ -14,10 +14,7 @@ from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
 from langgraph.graph import START, StateGraph, MessagesState, END
 from langgraph.prebuilt import ToolNode, tools_condition
 from langgraph.checkpoint.memory import MemorySaver
-from youtube_transcript_api import YouTubeTranscriptApi
-from yt_dlp import YoutubeDL
-from pptx import Presentation
-import docx
+from utils import loaders
 load_dotenv()
 
 class ConversationalRAG:
@@ -69,10 +66,10 @@ class ConversationalRAG:
             )
             documents.extend(loader.load())
         elif path.is_file() and path.suffix.lower() in (".ppt", ".pptx"):
-            loader = self.ppt_loader(str(path))
+            loader = loaders.ppt_loader(str(path))
             documents.extend( loader )
         elif path.is_file() and path.suffix.lower() in (".doc", ".docx") :
-            loader = self.doc_loader(str(path))
+            loader = loaders.doc_loader(str(path))
             documents.extend( loader )
         else:
             raise ValueError(f"Unsupported file type: {path}")
@@ -96,37 +93,6 @@ class ConversationalRAG:
 
         # Set up the graph after documents are processed
         self._setup_graph()
-    def ppt_loader(self, path:str):
-        prs = Presentation(path)
-        text = []
-        for slide in prs.slides:
-            for shape in slide.shapes:
-                if not shape.has_text_frame:
-                    continue
-                for para in shape.text_frame.paragraphs:
-                    for run in para.runs:
-                        text.append(run.text)
-        documents = [Document(page_content="".join(text))]
-        return documents
-    def doc_loader(self, path:str):
-        dox = docx.Document(path)
-        paras = dox.paragraphs
-        text = ""
-        for para in paras:
-            text += para.text
-        documents = [Document(page_content=text)]
-        return documents
-    def load_youtube(self, id: str) -> List[Document]:
-        """Load documents from a youtube video"""
-        transcript = YouTubeTranscriptApi.get_transcript(id)
-        text = ""
-        for i in transcript:
-            text += i['text'] + " "
-        documents = [Document(page_content=text)]
-        with YoutubeDL() as ydl:
-            info_dict = ydl.extract_info(id, download=False)
-            title = info_dict.get('title', None)
-        return documents, title
     def process_youtube(self, documents: List[Document]) -> str:
         """Process documents and create vector store"""
         # Split documents into chunks
