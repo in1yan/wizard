@@ -17,7 +17,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
   className = '',
   maxFiles = 5,
   maxSizeMB = 10,
-  allowedTypes = ['application/pdf', 'text/plain', 'text/markdown', 'text/csv'],
+  allowedTypes = ['application/pdf', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'text/plain', 'text/markdown', 'text/csv', "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
 }) => {
   const [dragActive, setDragActive] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -102,24 +102,35 @@ const FileUpload: React.FC<FileUploadProps> = ({
     }
   };
   
-  const handleFiles = (fileArray: File[]) => {
+  const handleFiles = async (fileArray: File[]) => {
     const validFiles = validateFiles(fileArray);
     
     if (validFiles.length > 0) {
       setUploading(true);
       
-      // Simulate network delay
-      setTimeout(() => {
+      try {
+        // Use the real API call instead of setTimeout
+        await import('@/lib/api').then(({ uploadFiles }) => {
+          return uploadFiles(validFiles.map(f => f.data!).filter(Boolean));
+        });
+        
         setSelectedFiles(prev => [...prev, ...validFiles]);
         onFilesUploaded(validFiles);
-        setUploading(false);
         
         toast({
           title: 'Files uploaded',
           description: `${validFiles.length} file(s) successfully uploaded.`,
           variant: 'default'
         });
-      }, 1000);
+      } catch (error) {
+        toast({
+          title: 'Upload failed',
+          description: error instanceof Error ? error.message : 'Failed to upload files',
+          variant: 'destructive'
+        });
+      } finally {
+        setUploading(false);
+      }
     }
   };
   
