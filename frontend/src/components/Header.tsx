@@ -26,6 +26,9 @@ const Header: React.FC = () => {
               <Button asChild variant="ghost" className="text-white hover:text-wizard-primary">
                 <Link to="/">Home</Link>
               </Button>
+              <Button asChild variant="ghost" className="text-white hover:text-wizard-primary">
+                <Link to="/markdown-demo">Demo</Link>
+              </Button>
               <Button asChild className="wizard-button">
                 <Link to="/chat">Chat</Link>
               </Button>

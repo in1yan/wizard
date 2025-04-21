@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef } from 'react';
 import { Message } from '@/lib/types';
 import ReactMarkdown from 'react-markdown';
@@ -5,6 +6,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { UserCircle, Sparkles } from 'lucide-react';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table';
+import MermaidDiagram from './MermaidDiagram';
 
 interface ChatMessageProps {
   message: Message;
@@ -61,6 +63,12 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
                 code({node, className, children, ...props}) {
                   const match = /language-(\w+)/.exec(className || '');
                   const inline = !match;
+                  
+                  // Handle Mermaid diagrams
+                  if (match && match[1] === 'mermaid') {
+                    return <MermaidDiagram chart={String(children).replace(/\n$/, '')} />;
+                  }
+                  
                   return !inline ? (
                     <SyntaxHighlighter
                       style={vscDarkPlus}
@@ -78,9 +86,11 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
                 },
                 table({node, ...props}) {
                   return (
-                    <Table className="my-4 border border-border rounded-lg overflow-hidden">
-                      {props.children}
-                    </Table>
+                    <div className="my-4 overflow-x-auto">
+                      <Table className="border border-border rounded-lg">
+                        {props.children}
+                      </Table>
+                    </div>
                   );
                 },
                 thead({node, ...props}) {
@@ -93,10 +103,10 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
                   return <TableRow>{props.children}</TableRow>;
                 },
                 th({node, ...props}) {
-                  return <TableHead className="bg-muted">{props.children}</TableHead>;
+                  return <TableHead className="bg-muted font-bold text-foreground p-2">{props.children}</TableHead>;
                 },
                 td({node, ...props}) {
-                  return <TableCell>{props.children}</TableCell>;
+                  return <TableCell className="border border-border p-2">{props.children}</TableCell>;
                 },
                 p({node, ...props}) {
                   return <p className="text-foreground mb-4" {...props} />;

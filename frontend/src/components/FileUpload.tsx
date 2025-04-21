@@ -17,7 +17,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
   className = '',
   maxFiles = 5,
   maxSizeMB = 10,
-  allowedTypes = ['application/pdf', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'text/plain', 'text/markdown', 'text/csv', "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
+  allowedTypes = ['application/pdf', 'text/plain', 'text/markdown', 'text/csv'],
 }) => {
   const [dragActive, setDragActive] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -102,33 +102,24 @@ const FileUpload: React.FC<FileUploadProps> = ({
     }
   };
   
-  const handleFiles = async (fileArray: File[]) => {
+  const handleFiles = (fileArray: File[]) => {
     const validFiles = validateFiles(fileArray);
     
     if (validFiles.length > 0) {
       setUploading(true);
       
-      try {
-        // Don't upload files here - they will be uploaded by the parent component
-        // when onFilesUploaded is called
-        
+      // Simulate network delay
+      setTimeout(() => {
         setSelectedFiles(prev => [...prev, ...validFiles]);
         onFilesUploaded(validFiles);
+        setUploading(false);
         
         toast({
           title: 'Files uploaded',
           description: `${validFiles.length} file(s) successfully uploaded.`,
           variant: 'default'
         });
-      } catch (error) {
-        toast({
-          title: 'Upload failed',
-          description: error instanceof Error ? error.message : 'Failed to upload files',
-          variant: 'destructive'
-        });
-      } finally {
-        setUploading(false);
-      }
+      }, 1000);
     }
   };
   

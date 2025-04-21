@@ -12,7 +12,6 @@ import WelcomeScreen from '@/components/WelcomeScreen';
 
 const Chat: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // Add loading state
   const { toast } = useToast();
   const {
     chatState,
