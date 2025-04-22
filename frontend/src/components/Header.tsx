@@ -1,12 +1,25 @@
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Sparkles } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Sparkles, LogOut } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 const Header: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const isHome = location.pathname === '/';
+  const token = localStorage.getItem('token');
+  
+  const handleSignOut = () => {
+    localStorage.removeItem('token');
+    toast({
+      title: "Success",
+      description: "Signed out successfully",
+    });
+    navigate('/signin');
+  };
   
   return (
     <header className={`w-full z-10 ${isHome ? 'absolute top-0' : 'bg-wizard-dark/95 shadow-md'}`}>
@@ -17,20 +30,27 @@ const Header: React.FC = () => {
         </Link>
         
         <nav className="flex items-center gap-6">
-          {isHome ? (
-            <Button asChild className="wizard-button">
-              <Link to="/chat">Start Chat</Link>
-            </Button>
+          {token ? (
+            <>
+              <Button asChild variant="ghost" className="text-white hover:text-wizard-primary">
+                <Link to="/chat">Chat</Link>
+              </Button>
+              <Button 
+                variant="outline" 
+                onClick={handleSignOut}
+                className="text-white hover:text-wizard-primary flex items-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Sign Out
+              </Button>
+            </>
           ) : (
             <>
               <Button asChild variant="ghost" className="text-white hover:text-wizard-primary">
-                <Link to="/">Home</Link>
-              </Button>
-              <Button asChild variant="ghost" className="text-white hover:text-wizard-primary">
-                <Link to="/markdown-demo">Demo</Link>
+                <Link to="/signin">Sign In</Link>
               </Button>
               <Button asChild className="wizard-button">
-                <Link to="/chat">Chat</Link>
+                <Link to="/signup">Sign Up</Link>
               </Button>
             </>
           )}

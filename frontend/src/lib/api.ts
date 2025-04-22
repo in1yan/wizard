@@ -1,4 +1,10 @@
+
 export const uploadFiles = async (files: File[]): Promise<Response> => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('Not authenticated');
+  }
+
   const formData = new FormData();
   files.forEach((file) => {
     formData.append('files', file);
@@ -6,6 +12,9 @@ export const uploadFiles = async (files: File[]): Promise<Response> => {
 
   const response = await fetch('http://localhost:8000/upload', {
     method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
     body: formData,
   });
 
@@ -17,10 +26,16 @@ export const uploadFiles = async (files: File[]): Promise<Response> => {
 };
 
 export const sendMessage = async (message: string): Promise<string> => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('Not authenticated');
+  }
+
   const response = await fetch('http://localhost:8000/chat', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify({ question: message }),
   });
@@ -35,10 +50,16 @@ export const sendMessage = async (message: string): Promise<string> => {
 };
 
 export const processYoutubeVideo = async (videoId: string): Promise<{ message: string; title: string }> => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('Not authenticated');
+  }
+
   const response = await fetch('http://localhost:8000/process-youtube', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify({ video_id: videoId }),
   });
