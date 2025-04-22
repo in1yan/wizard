@@ -1,17 +1,20 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException, Body
+from fastapi import FastAPI, UploadFile, File, HTTPException, Body, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from rag import ConversationalRAG
 from pathlib import Path
-from pydantic import BaseModel
 import shutil
 import os
 from utils.loaders import load_youtube
+from auth import authenticate_user, create_acess_token, get_current_user, create_user, get_db
+from sqlalchemy.orm import Session
+from fastapi.security import OAuth2PasswordRequestForm
+from models import VideoID, UserRegister
 app = FastAPI()
 
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080"],  # React dev server
+    allow_origins=["*"],  # React dev server
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -22,10 +25,23 @@ rag = ConversationalRAG()
 # Create uploads directory if it doesn't exist
 UPLOADS_DIR = Path("uploads")
 UPLOADS_DIR.mkdir(exist_ok=True)
-class VideoID(BaseModel):
-    video_id: str
+
+@app.post("/token")
+async def login(form_data: OAuth2PasswordRequestForm= Depends(), db: Session = Depends(get_db)):
+    user = authenticate_user(db, form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    access_token = create_acess_token(data={"sub":user.username})
+    return {"access_token": access_token, "token_type":"bearer"}
+
+@app.post("/register")
+async def register(form_data: UserRegister, db: Session = Depends(get_db)):
+    created_user = create_user(db, form_data.username, form_data.password)
+    if not created_user:
+        raise HTTPException(status_code=400, detail="user already exists")
+    return {"message":"Registered successfully"}
 @app.post("/upload")
-async def upload_file(files: list[UploadFile] = File(...)):
+async def upload_file(files: list[UploadFile] = File(...),user:dict = Depends(get_current_user)):
     try:
         # Save uploaded files
         saved_files = []
@@ -45,7 +61,7 @@ async def upload_file(files: list[UploadFile] = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 @app.post("/process-youtube")
-async def process_youtube(video:VideoID):
+async def process_youtube(video:VideoID, user:dict = Depends(get_current_user)):
     try:
         id = video.video_id
         videos, title = load_youtube(id)
@@ -57,7 +73,7 @@ async def process_youtube(video:VideoID):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 @app.post("/chat")
-async def chat(question: str = Body(..., embed=True)):
+async def chat(question: str = Body(..., embed=True), user:dict = Depends(get_current_user)):
     try:
         # Using the already extracted question parameter
         if not question:
