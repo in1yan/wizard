@@ -39,7 +39,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     python -m pip install -r requirements.txt
 
 # Switch to the non-privileged user to run the application.
-USER appuser
+# USER appuser
 
 # Copy the source code into the container.
 COPY . .
@@ -48,4 +48,4 @@ COPY . .
 EXPOSE 8000
 
 # Run the application.
-CMD uvicorn 'app:app' --host=0.0.0.0 --port=8000 --workers=4
+CMD uvicorn app:app --host=0.0.0.0 --port=8000 --workers=4
