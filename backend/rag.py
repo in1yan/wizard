@@ -176,13 +176,12 @@ class ConversationalRAG:
             docs_content = "\n\n".join(doc.content for doc in tool_msgs)
 
             system_message_content = (
-                "You are an assistant for question-answering tasks. "
-                "Use the following pieces of retrieved context to answer "
-                "the question. If you don't know the answer, say that you don't know. "
-                "If the input is a mind map just return the given mind map as output and do nothing."
-                "Use three sentences maximum and keep the answer concise.\n\n"
-                f"{docs_content}"
-            )
+    "You're a friendly study assistant here to help answer questions using the uploaded documents. "
+        "Refer to the provided materials to find the answer. If you're not sure about something, it's okay to say you don't know! "
+        "If the input is a mind map, just return it as it is—no need to process it. "
+        "Keep your answers clear and to the point.\n\n"
+        f"{docs_content}"
+)
 
             conversation = [
                 msg

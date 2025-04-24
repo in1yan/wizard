@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Sparkles, LogOut } from 'lucide-react';
+import { Sparkles, LogOut, Bookmark } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
@@ -25,7 +24,12 @@ const Header: React.FC = () => {
     <header className={`w-full z-10 ${isHome ? 'absolute top-0' : 'bg-wizard-dark/95 shadow-md'}`}>
       <div className="container flex items-center justify-between py-4 px-4 md:px-8">
         <Link to="/" className="flex items-center space-x-2">
-          <Sparkles className="h-6 w-6 text-wizard-primary" />
+          {/* <Sparkles className="h-6 w-6 text-wizard-primary" /> */}
+          <img 
+            src="/public/wizard.png" 
+            alt="logo" 
+            style={{ width: '50px', height: '50px' }} 
+          />
           <span className="text-xl md:text-2xl font-bold wizard-gradient-text">Wizard</span>
         </Link>
         
@@ -34,6 +38,12 @@ const Header: React.FC = () => {
             <>
               <Button asChild variant="ghost" className="text-white hover:text-wizard-primary">
                 <Link to="/chat">Chat</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-white hover:text-wizard-primary">
+                <Link to="/notes">
+                  <Bookmark className="w-4 h-4 mr-2" />
+                  Notes
+                </Link>
               </Button>
               <Button 
                 variant="outline" 

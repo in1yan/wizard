@@ -1,12 +1,14 @@
-
 import React, { useEffect, useRef } from 'react';
 import { Message } from '@/lib/types';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { UserCircle, Sparkles } from 'lucide-react';
+import { UserCircle, Sparkles, Bookmark } from 'lucide-react';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table';
 import MermaidDiagram from './MermaidDiagram';
+import { Button } from '@/components/ui/button';
+import { saveNote } from '@/lib/api';
+import { useToast } from '@/hooks/use-toast';
 
 interface ChatMessageProps {
   message: Message;
@@ -14,6 +16,7 @@ interface ChatMessageProps {
 
 const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   const messageRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
   
   useEffect(() => {
     if (messageRef.current) {
@@ -27,6 +30,22 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       minute: '2-digit',
       hour12: true 
     }).format(date);
+  };
+
+  const handleSaveNote = async () => {
+    try {
+      await saveNote(message.content);
+      toast({
+        title: 'Success',
+        description: 'Note saved successfully',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to save note',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
@@ -48,13 +67,26 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
         </div>
         
         <div className="flex-grow">
-          <div className="flex items-center mb-1">
-            <span className="font-medium text-sm">
-              {message.role === 'user' ? 'You' : 'Wizard'}
-            </span>
-            <span className="ml-2 text-xs text-muted-foreground">
-              {formatTime(message.timestamp)}
-            </span>
+          <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center">
+              <span className="font-medium text-sm">
+                {message.role === 'user' ? 'You' : 'Wizard'}
+              </span>
+              <span className="ml-2 text-xs text-muted-foreground">
+                {formatTime(message.timestamp)}
+              </span>
+            </div>
+            {message.role === 'assistant' && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-muted-foreground hover:text-wizard-primary"
+                onClick={handleSaveNote}
+              >
+                <Bookmark className="h-4 w-4" />
+                <span className="ml-2">Save</span>
+              </Button>
+            )}
           </div>
           
           <div className="prose prose-invert prose-sm max-w-none">
@@ -64,7 +96,6 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
                   const match = /language-(\w+)/.exec(className || '');
                   const inline = !match;
                   
-                  // Handle Mermaid diagrams
                   if (match && match[1] === 'mermaid') {
                     return <MermaidDiagram chart={String(children).replace(/\n$/, '')} />;
                   }

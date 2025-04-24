@@ -10,6 +10,7 @@ import MarkdownDemo from "./pages/MarkdownDemo";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import AuthProtected from "./components/AuthProtected";
+import Notes from "./pages/Notes";
 
 const queryClient = new QueryClient();
 
@@ -29,7 +30,15 @@ const App = () => (
               </AuthProtected>
             } 
           />
-          // <Route path="/markdown-demo" element={<MarkdownDemo />} />
+          <Route 
+            path="/notes" 
+            element={
+              <AuthProtected>
+                <Notes />
+              </AuthProtected>
+            } 
+          />
+          <Route path="/markdown-demo" element={<MarkdownDemo />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="*" element={<NotFound />} />

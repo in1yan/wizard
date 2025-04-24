@@ -1,29 +1,12 @@
-export interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: Date;
+
+export interface Note {
+  id: number;
+  user: string;
+  note: string;  // Changed from the previous definition
+  created_at: string;
 }
 
-export interface FileInfo {
-  id: string;
-  name: string;
-  size: number;
-  type: string;
-  uploaded: Date;
-  data?: File;
-}
-
-export interface VideoInfo {
-  id: string;
-  title: string;
-  url: string;
-}
-
-export interface ChatState {
-  messages: Message[];
-  files: FileInfo[];
-  videos: VideoInfo[];
-  isProcessing: boolean;
-  isFirstUpload: boolean;
+export interface NoteResponse {
+  response: string;
+  note: Note;
 }

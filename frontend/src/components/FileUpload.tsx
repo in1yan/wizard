@@ -1,7 +1,6 @@
-
 import React, { useState, useRef } from 'react';
 import { FileInfo } from '@/lib/types';
-import { Upload, X, FileText, Check } from 'lucide-react';
+import { Upload, X, FileText, Check, File } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface FileUploadProps {
@@ -17,7 +16,14 @@ const FileUpload: React.FC<FileUploadProps> = ({
   className = '',
   maxFiles = 5,
   maxSizeMB = 10,
-  allowedTypes = ['application/pdf', 'text/plain', 'text/markdown', 'text/csv'],
+  allowedTypes = [
+    'application/pdf', 
+    'text/plain', 
+    'text/markdown', 
+    'text/csv',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation', 
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',  
+  ],
 }) => {
   const [dragActive, setDragActive] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -137,6 +143,16 @@ const FileUpload: React.FC<FileUploadProps> = ({
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   };
 
+  const getFileIcon = (fileType: string) => {
+    if (fileType.includes('presentation')) {
+      return <File className="h-5 w-5 text-wizard-primary" />;
+    } else if (fileType.includes('wordprocessing')) {
+      return <File className="h-5 w-5 text-wizard-primary" />;
+    } else {
+      return <FileText className="h-5 w-5 text-wizard-primary" />;
+    }
+  };
+
   return (
     <div className={`w-full ${className}`}>
       <div 
@@ -165,8 +181,11 @@ const FileUpload: React.FC<FileUploadProps> = ({
           <h3 className="text-lg font-medium mb-1">
             {uploading ? 'Uploading...' : 'Drag files here or click to browse'}
           </h3>
+          <p className="text-muted-foreground text-sm mb-2">
+            Upload up to {maxFiles} files (max {maxSizeMB}MB each)
+          </p>
           <p className="text-xs text-muted-foreground">
-            Supported formats: PDF, PPT, DOCX
+            Supported formats: PDF, PPT, DOC
           </p>
         </div>
       </div>
@@ -182,7 +201,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
               >
                 <div className="flex items-center">
                   <div className="mr-3 bg-wizard-primary/10 p-2 rounded-md">
-                    <FileText className="h-5 w-5 text-wizard-primary" />
+                    {getFileIcon(file.type)}
                   </div>
                   <div>
                     <p className="text-sm font-medium truncate max-w-[200px]">{file.name}</p>
