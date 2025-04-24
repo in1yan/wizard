@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, FileUp, MessageSquare, Sparkles } from 'lucide-react';
+import { ArrowRight, FileUp, MessageSquare, Sparkles , Waypoints, FileText, Youtube} from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import ParticlesBackground from '@/components/ParticlesBackground';
 import Header from '@/components/Header';
@@ -11,7 +10,7 @@ const Index: React.FC = () => {
     {
       icon: <FileUp className="h-8 w-8 text-wizard-primary mb-4" />,
       title: "Drag & Drop Files",
-      description: "Upload your documents with a simple drag and drop interface. Support for PDFs, TXT, MD, and CSV files."
+      description: "Upload your documents with a simple drag and drop interface."
     },
     {
       icon: <MessageSquare className="h-8 w-8 text-wizard-primary mb-4" />,
@@ -22,6 +21,21 @@ const Index: React.FC = () => {
       icon: <Sparkles className="h-8 w-8 text-wizard-primary mb-4" />,
       title: "Magical Experience",
       description: "A beautifully designed interface with magical animations and responsive design for all devices."
+    },
+    {
+      icon: <Waypoints className="h-8 w-8 text-wizard-primary mb-4" />,
+      title: "Mind Maps",
+      description: "Generate Mind maps of the uploaded sources with the use of AI."
+    },
+    {
+      icon: < FileText className="h-8 w-8 text-wizard-primary mb-4" />,
+      title: "Documents",
+      description: "Supports common file formats : pdf, ppt and doc files"
+    },
+    {
+      icon: < Youtube className="h-8 w-8 text-wizard-primary mb-4" />,
+      title: "YouTube Videos",
+      description: "You can add those boring lectures from youtube and summarise them."
     }
   ];
 
@@ -37,17 +51,17 @@ const Index: React.FC = () => {
             <div className="max-w-3xl mx-auto text-center space-y-8">
               <div className="space-y-4">
                 <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-                  <span className="wizard-gradient-text">Unlock the Magic</span> of Your Documents
+                  <span className="wizard-gradient-text">Turn Your Notes into </span> a Study Buddy!
                 </h1>
                 <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-                  Chat with your documents using our powerful AI wizard. Upload files and get instant, intelligent responses based on their content.
+Got a mountain of PDFs and class notes? Just upload them and let our AI wizard work its magic! Ask anything and get quick, smart answers straight from your own study material. Studying has never been this fun (or this easy)!
                 </p>
               </div>
               
               <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <Button asChild className="wizard-button py-6 px-8 text-lg">
                   <Link to="/chat">
-                    Start Chatting <ArrowRight className="ml-2 h-5 w-5" />
+                    Let’s Get Studying! 🎓✨ <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
               </div>

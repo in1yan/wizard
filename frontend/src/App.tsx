@@ -29,7 +29,7 @@ const App = () => (
               </AuthProtected>
             } 
           />
-          <Route path="/markdown-demo" element={<MarkdownDemo />} />
+          // <Route path="/markdown-demo" element={<MarkdownDemo />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="*" element={<NotFound />} />

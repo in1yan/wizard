@@ -165,11 +165,8 @@ const FileUpload: React.FC<FileUploadProps> = ({
           <h3 className="text-lg font-medium mb-1">
             {uploading ? 'Uploading...' : 'Drag files here or click to browse'}
           </h3>
-          <p className="text-muted-foreground text-sm mb-2">
-            Upload up to {maxFiles} files (max {maxSizeMB}MB each)
-          </p>
           <p className="text-xs text-muted-foreground">
-            Supported formats: PDF, TXT, MD, CSV
+            Supported formats: PDF, PPT, DOCX
           </p>
         </div>
       </div>

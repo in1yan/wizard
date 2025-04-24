@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Wand2, Scroll, Sparkles, Book } from 'lucide-react';
+import { Wand2, Scroll, Sparkles, Book, LogIn } from 'lucide-react';
 
 const Landing: React.FC = () => {
   return (
@@ -17,12 +17,21 @@ const Landing: React.FC = () => {
               Wizard
             </span>
           </div>
-          <Link
-            to="/chat"
-            className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white px-6 py-2.5 rounded-xl font-medium hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30"
-          >
-            Enter Portal
-          </Link>
+          <div className="flex items-center space-x-3">
+            <Link
+              to="/login"
+              className="flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white px-6 py-2.5 rounded-xl font-medium hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30"
+            >
+              <LogIn size={18} />
+              <span>Login</span>
+            </Link>
+            <Link
+              to="/chat"
+              className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white px-6 py-2.5 rounded-xl font-medium hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30"
+            >
+              Enter Portal
+            </Link>
+          </div>
         </div>
       </header>
 

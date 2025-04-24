@@ -1,13 +1,21 @@
 import React from 'react';
-import { Wand2, Menu } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Wand2, Menu, LogOut } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface ChatHeaderProps {
   onToggleSidebar: () => void;
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ onToggleSidebar }) => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
   return (
     <header className="flex items-center justify-between py-4 px-4 border-b bg-gradient-to-r from-purple-900 to-indigo-900 dark:bg-gray-800 dark:border-gray-700">
       <div className="flex items-center">
@@ -28,7 +36,16 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ onToggleSidebar }) => {
           </div>
         </Link>
       </div>
-      <ThemeToggle />
+      <div className="flex items-center space-x-3">
+        <button
+          onClick={handleLogout}
+          className="flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-gradient-to-r from-red-500 to-red-600 text-white text-sm hover:from-red-600 hover:to-red-700 transition-colors"
+        >
+          <LogOut size={16} />
+          <span>Logout</span>
+        </button>
+        <ThemeToggle />
+      </div>
     </header>
   );
 };
