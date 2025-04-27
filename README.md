@@ -43,7 +43,6 @@ Perfect for exam prep, quick concept revision, and interactive learning!
 - **Frontend:** React + Tailwind CSS + mermaid js
 - **Backend:** FastAPI + Langchain + Langgraph + Sqlalchemy  
 - **Database:** postgres(On supabase) / sqlite(Testing)
-- **APIs:** OpenAI/Groq + Custom mind map generation logic  
 - **Hosting:** Frontend(vercel) , Backend(None)
 
 ### Sponsor Technologies Used:
@@ -76,7 +75,7 @@ Perfect for exam prep, quick concept revision, and interactive learning!
 ## 📽️ Demo & Deliverables
 
 - **Demo Video Link:** [https://youtu.be/zzNlpvRekCM?si=1u2DbWPrU0-1NVY-](https://youtu.be/zzNlpvRekCM?si=1u2DbWPrU0-1NVY-)  
-- **Pitch Deck / PPT Link:** [https://docs.google.com/presentation/d/wizardai-pitch](https://docs.google.com/presentation/d/wizardai-pitch)
+- **Pitch Deck / PPT Link:** [https://docs.google.com/presentation/d/1DFR_sjBjDS_6CsUnq2JS4-05rpigyGcJ/edit?usp=sharing&ouid=114568958041626311775&rtpof=true&sd=true](https://docs.google.com/presentation/d/1DFR_sjBjDS_6CsUnq2JS4-05rpigyGcJ/edit?usp=sharing&ouid=114568958041626311775&rtpof=true&sd=true)
 
 ---
 
