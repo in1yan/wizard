@@ -58,13 +58,18 @@ Perfect for exam prep, quick concept revision, and interactive learning!
 
 ## ✨ Key Features
 
-- ✅ **Upload Documents or notes or youtube lectures** and get answers from the content  
-- ✅ **Ask questions** in natural language, powered by Groq's fast inference  
-- ✅ **Summarize large documents** into key points  
-- ✅ **AI-generated mind maps** to visualize complex ideas  
-- ✅ **Save Q&A sessions** as notes for future reference  
+- ✅ **Upload Documents or notes or youtube lectures** and get answers from the content
+<img src="https://github.com/user-attachments/assets/c5df88e6-80bb-4fc4-92d1-6c254a476c6a" alt="Alt Text" style="width:50%; height:auto;">
 
-![Wizard AI screenshot](https://your-image-link.com/screenshot.png)
+- ✅ **Ask questions** in natural language, powered by Groq's fast inference
+<img src="https://github.com/user-attachments/assets/6143157c-62b8-4682-9501-32f3fff4db35" alt="Alt Text" style="width:50%; height:auto;">
+
+- ✅ **Summarize large documents** into key points  
+- ✅ **AI-generated mind maps** to visualize complex ideas
+<img src="https://github.com/user-attachments/assets/39f8de26-7b87-404d-9313-b91302421ec3" alt="Alt Text" style="width:50%; height:auto;">
+
+- ✅ **Save Q&A sessions** as notes for future reference  
+<img src="https://github.com/user-attachments/assets/6c0c2023-0873-4ea7-9ae3-b627e8f6f9cb" alt="Alt Text" style="width:50%; height:auto;">
 
 ---
 
