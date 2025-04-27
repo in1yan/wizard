@@ -27,7 +27,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-rag = ConversationalRAG()
+session = {}
 
 # Create uploads directory if it doesn't exist
 UPLOADS_DIR = Path("uploads")
@@ -59,6 +59,9 @@ async def upload_file(
     files: list[UploadFile] = File(...), user: dict = Depends(get_current_user)
 ):
     try:
+        if user["username"] not in session:
+            session[user["username"]] = ConversationalRAG()
+        rag = session[user["username"]]
         # Save uploaded files
         saved_files = []
         for file in files:
@@ -81,6 +84,9 @@ async def upload_file(
 @app.post("/process-youtube")
 async def process_youtube(video: VideoID, user: dict = Depends(get_current_user)):
     try:
+        if user["username"] not in session:
+            session[user["username"]] = ConversationalRAG()
+        rag = session[user["username"]]
         id = video.video_id
         videos, title = load_youtube(id)
         rag.process_youtube(videos)
@@ -98,6 +104,9 @@ async def chat(
 ):
     try:
         # Using the already extracted question parameter
+        if user["username"] not in session:
+            session[user["username"]] = ConversationalRAG()
+        rag = session[user["username"]]
         if not question:
             raise HTTPException(status_code=422, detail="Question field is required")
         response = rag.chat(question)

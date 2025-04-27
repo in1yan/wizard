@@ -26,7 +26,7 @@ const Header: React.FC = () => {
         <Link to="/" className="flex items-center space-x-2">
           {/* <Sparkles className="h-6 w-6 text-wizard-primary" /> */}
           <img 
-            src="/public/wizard.png" 
+            src="/wizard.png" 
             alt="logo" 
             style={{ width: '50px', height: '50px' }} 
           />

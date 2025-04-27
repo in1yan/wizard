@@ -84,7 +84,7 @@ const Chat: React.FC = () => {
     <div className="flex flex-col h-screen">
       <Header />
       
-      <div className="flex flex-grow overflow-hidden pt-16">
+      <div className="flex flex-grow overflow-hidden">
         <Sidebar 
           files={chatState.files}
           videos={chatState.videos}
